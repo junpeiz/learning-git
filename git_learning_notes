@@ -1,0 +1,56 @@
+##Initialize
+用`git init`可以在当前目录下初始化一个repository  
+而且会自动生成一个.git的隐藏文件夹，里面的东西是git的核心部分，但我们一般不用关心  
+##cheking status
+利用`git status`可以查看当前的状态，比如新增加了一个文件之后，就会显示有Untracked files  
+##Adding Changes
+对于untracked的file，可以利用`add`命令将其加入到staging area  
+当然，用add命令的时候也可以结合通配符来提高效率,比如`git add '*.txt'`
+##Commiting
+当add过之后，文件列表是在Staging Area里面，它们现在还不在repository里，在我们把这些文件加到repository之前我们还可以在Staging Area里面任意增加或者删除文件。在确定了之后就可以使用commit命令来把改动储存到repository里  
+`git commit -m "Add cute octocat story"`
+##History
+可以利用`git log`命令来查看history，它会按照时间顺序列出所有的commit的注释（也就是-m参数）
+##Remote Repositories
+现在我们要把本地的这个repository提交到GitHub server上，所以我们需要增加一个remote repository，可以用命令：  
+`git remote add origin https://github.com/try-git/try_git.git`
+这个命令需要的参数有remote name以及repository URL  
+显然这里的remote name是origin
+##Pushing Remotely
+因为默认的local branch name is master，而且remote name是origin，那么我们的push的命令就是：  
+`git push -u origin master`  
+这里的-u的作用是告诉系统下次的默认参数就是这两个，也就是可以直接调用`git push`命令
+##Pulling Remotely
+当别人对我们的repository进行了改动之后，如果想把远程的改动同步到本地，那么可以使用命令：  
+`git pull origin master`
+##Differences
+如果想知道现在这个repository和我们最近的一次commit的版本之间有什么差异，可以使用命令：  
+`git diff HEAD`  
+其中HEAD是一个指针，默认指向我最近的一次commit  
+diff命令通常还可以用于查看changes within files that have already been staged. Remember, staged files are files we have told git that are ready to be committed.  
+比如现在我们执行：  
+`git add octofamily/octodog.txt`  
+然后就可以通过`git diff --staged`来查看staged中的文件的修改情况
+##Resetting the Stage
+如果想把某个文件从staged files中移除，可以使用`git reset`命令，比如：  
+`git reset octofamily/octodog.txt`
+##Undo
+之前执行的git reset命令只能把文件从staged files中移除，而不能直接把它从本地删掉。Files can be changed back to how they were at the last commit by using the command: `git checkout -- <target>`.
+比如我们要回到the last commit for octocat.txt的状态，那么可以用`git checkout -- octocat.txt`
+##Branching Out
+一般会为每一个要开发的feature建立一个branch，对应的feature完成以后再把对应的branch合并到master里面去，可以利用`git branch <branch>`命令来创建分支，比如：`git branch clean_up`,然后用`git branch`命令可以看到现有的分支以及目前正在操作哪个branch
+##Switching Branches
+在分支间切换可以使用`git checkout <branch>`命令，比如`git checkout clean_up`
+##Removing All The Things
+对于remove文件可以用`git rm`命令，这个命令不仅会remove the actual files from disk，而且会记录下remove这个文件的这个操作，也就是会stage the removal of the files for us.比如现在执行`git rm '*.txt'`  
+需要注意的是，如果我们直接去文件夹里把某个文件删除，还是需要再执行一遍git rm命令来把这个文件从working tree里移除。当然，也可以在commit的时候利用'-a'来指定自动移除  
+remove了以后记得commit一下，也就是`git commit -m "Remove all the cats"`
+##Preparing to Merge
+利用`git checkout mater`切换回主分支之后，再用`git merge clean_up`把clean_up这个分支给合并进来，其实也就是把之前对clean_up这个分支的操作对主分支再做一遍
+##Keeping Things Clean
+把需要的分支合并进来之后，就可以把原来的那个分支删掉了，利用`git branch -d <branch name>`命令可以删除指定名称的分支，比如：`git branch -d clean_up`
+##The Final Push
+最后再把这些所有在本地的操作都push到远程服务器上就可以了：`git push`
+##More
+更多详细的内容请参阅Git的[官方document](https://git-scm.com/docs "https://git-scm.com/docs")
+以及[Github Help](https://help.github.com/ "https://help.github.com/")
